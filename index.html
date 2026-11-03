@@ -182,7 +182,90 @@
   .closing .big em { font-style: normal; color: var(--gold); }
   .closing .line { margin: 0; font-size: 1.6rem; line-height: 1.35; text-wrap: balance; }
 
+  /* ---------- ribbons ---------- */
+  .ribbon { display: none; position: fixed; z-index: 4; pointer-events: none; }
+  body[data-ribbon="np"] .ribbon-np,
+  body[data-ribbon="tape"] .ribbon-tape,
+  body[data-ribbon="side"] .ribbon-side { display: flex; }
+  body[data-ribbon="np"] main { padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px)); }
+  body[data-ribbon="tape"] main { padding-bottom: calc(10rem + env(safe-area-inset-bottom, 0px)); }
+  body[data-ribbon="side"] main { padding-right: max(44px, calc(env(safe-area-inset-right, 0px) + 32px)); }
+
+  .track { display: inline-flex; white-space: nowrap; animation: marquee 22s linear infinite; }
+  .track span { padding-right: 2.5rem; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* A: now playing */
+  .ribbon-np {
+    left: 0; right: 0; bottom: 0;
+    align-items: center; gap: .8rem;
+    padding: .7rem max(16px, env(safe-area-inset-right, 0px)) calc(.7rem + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background: rgba(20, 9, 14, .88);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid var(--rule);
+    font-size: .92rem;
+    color: var(--ivory);
+  }
+  .np-disc {
+    flex: none; width: 2rem; height: 2rem; border-radius: 50%;
+    background: radial-gradient(circle, #0c0609 0 8%, var(--rose) 9% 32%, transparent 33%), repeating-radial-gradient(circle, #140a0e 0 1px, #24141b 1px 2px);
+    animation: spin 4s linear infinite;
+  }
+  .np-text {
+    flex: 1; min-width: 0; overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .np-text .track { animation-duration: 14s; }
+  .np-text b { color: var(--gold); font-weight: 400; font-style: italic; margin-right: .4rem; }
+
+  /* B: crossed tapes */
+  .ribbon-tape { left: 0; right: 0; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); height: 6rem; overflow: hidden; }
+  .tape {
+    position: absolute; left: -10%; right: -10%;
+    overflow: hidden;
+    padding: .45rem 0;
+    font-size: .8rem; letter-spacing: .18em; text-transform: uppercase;
+    box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  }
+  .tape.t1 { top: 1.6rem; transform: rotate(-4deg); background: var(--gold); color: var(--wine); }
+  .tape.t2 { top: 1.6rem; transform: rotate(4deg); background: var(--rose); color: var(--wine); }
+  .tape.t2 .track { animation-direction: reverse; animation-duration: 26s; }
+
+  /* C: side ribbon */
+  .ribbon-side {
+    top: 0; bottom: 0; right: env(safe-area-inset-right, 0px);
+    width: 28px;
+    background: var(--gold);
+    color: var(--wine);
+    overflow: hidden;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .side-track {
+    writing-mode: vertical-rl;
+    white-space: nowrap;
+    font-size: .78rem; letter-spacing: .2em; text-transform: uppercase;
+    line-height: 28px;
+    will-change: transform;
+  }
+
+  .picker {
+    position: fixed; z-index: 5;
+    top: calc(12px + env(safe-area-inset-top, 0px)); left: max(12px, env(safe-area-inset-left, 0px));
+    display: flex; gap: 6px;
+  }
+  .picker button {
+    font: inherit; font-size: .8rem;
+    background: rgba(20, 9, 14, .85); color: var(--ivory);
+    border: 1px solid var(--rule); border-radius: 999px;
+    padding: .3rem .75rem; cursor: pointer;
+  }
+  .picker button[aria-pressed="true"] { background: var(--gold); color: var(--wine); }
+  .picker button:focus-visible { outline: 2px solid var(--ivory); outline-offset: 2px; }
+
   @media (prefers-reduced-motion: reduce) {
+    .track, .np-disc { animation: none; }
     .record { animation: none; }
     .sher { transition: none; }
     .js .sher:not(.in) { opacity: 1; transform: none; }
@@ -205,30 +288,30 @@
 
   <p class="intro">I am not a shayar, so I have gathered some of these. Hope you like it.</p>
 
-  <blockquote class="sher">
-    <p><span>Hazaaron khwahishein aisi ki har khwahish pe dam nikle,</span><span>bahut nikle mere armaan lekin phir bhi kam nikle</span></p>
-    <cite>Mirza Ghalib</cite>
+  <blockquote class="sher" data-track="Afreen Afreen · Nusrat Fateh Ali Khan">
+    <p><span>Husn-e-jaana ki taarif mumkin nahi,</span><span>afreen afreen</span></p>
+    <cite>Afreen Afreen · Nusrat Fateh Ali Khan</cite>
   </blockquote>
 
   <div class="divider" aria-hidden="true">✦</div>
 
-  <blockquote class="sher">
-    <p><span>Magar mujhko lauta do bachpan ka saawan,</span><span>woh kaagaz ki kashti, woh baarish ka paani</span></p>
-    <cite>Sudarshan Faakir · Jagjit Singh</cite>
+  <blockquote class="sher" data-track="Mere Rashke Qamar · Nusrat Fateh Ali Khan">
+    <p><span>Mere rashk-e-qamar, tu ne pehli nazar,</span><span>jab nazar se milaayi maza aa gaya</span></p>
+    <cite>Mere Rashke Qamar · Nusrat Fateh Ali Khan</cite>
   </blockquote>
 
   <div class="divider" aria-hidden="true">✦</div>
 
-  <blockquote class="sher">
-    <p><span>Dil-e-naadaan tujhe hua kya hai,</span><span>aakhir is dard ki dawa kya hai</span></p>
-    <cite>Mirza Ghalib</cite>
+  <blockquote class="sher" data-track="Yeh Jo Halka Halka Suroor Hai · Nusrat Fateh Ali Khan">
+    <p><span>Ye jo halka halka suroor hai,</span><span>ye teri nazar ka qusoor hai</span></p>
+    <cite>Yeh Jo Halka Halka Suroor Hai · Nusrat Fateh Ali Khan</cite>
   </blockquote>
 
   <div class="divider" aria-hidden="true">✦</div>
 
-  <blockquote class="sher">
-    <p><span>Ghar se masjid hai bahut door chalo yun kar lein,</span><span>kisi rote hue bachche ko hansaya jaaye</span></p>
-    <cite>Nida Fazli</cite>
+  <blockquote class="sher" data-track="Achha Sila Diya · Attaullah Khan Esakhelvi">
+    <p><span>Achha sila diya tu ne mere pyaar ka,</span><span>yaar ne hi loot liya ghar yaar ka</span></p>
+    <cite>Achha Sila Diya · Attaullah Khan Esakhelvi<br>(Attaullah ke bina mehfil adhoori hai, sorry)</cite>
   </blockquote>
 
   <p class="note">Bas itna hi. Ye saal tumhe utna hi khush rakhe jitna tum sabko rakhti ho.</p>
@@ -244,9 +327,34 @@
 
   <section class="closing">
     <p class="big">Happy birthday, <em>Shruti.</em></p>
-    <p class="line">I'll try to keep your no-cry streak going.</p>
+    <p class="line">Jaari rakhte hain tumhari no-rone ki koshish.</p>
   </section>
 </main>
+
+<!-- Ribbon A: now-playing bar that follows the sher on screen -->
+<div class="ribbon ribbon-np" aria-hidden="true">
+  <div class="np-disc"></div>
+  <div class="np-text"><div class="track"><span data-np></span><span data-np></span></div></div>
+</div>
+
+<!-- Ribbon B: two crossed festive tapes at the bottom -->
+<div class="ribbon ribbon-tape" aria-hidden="true">
+  <div class="tape t1"><div class="track"><span>Happy birthday Shruti ✦ Janamdin mubarak ✦ Ek shaam Shruti ke naam ✦ </span><span>Happy birthday Shruti ✦ Janamdin mubarak ✦ Ek shaam Shruti ke naam ✦ </span></div></div>
+  <div class="tape t2"><div class="track"><span>Afreen afreen ✦ Maza aa gaya ✦ Halka halka suroor ✦ </span><span>Afreen afreen ✦ Maza aa gaya ✦ Halka halka suroor ✦ </span></div></div>
+</div>
+
+<!-- Ribbon C: vertical ribbon on the right edge, moves with the scroll -->
+<div class="ribbon ribbon-side" aria-hidden="true">
+  <div class="side-track" data-side>Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦</div>
+</div>
+
+<!-- Only shows when the link ends in ?try -->
+<div class="picker" hidden>
+  <button type="button" data-pick="np">A</button>
+  <button type="button" data-pick="tape">B</button>
+  <button type="button" data-pick="side">C</button>
+  <button type="button" data-pick="none">off</button>
+</div>
 
 <script>
   (function () {
@@ -263,6 +371,53 @@
     } else {
       items.forEach(el => el.classList.add("in"));
     }
+
+    // ---- ribbons: ?ribbon=np|tape|side|none picks one, ?try shows the switcher ----
+    const params = new URLSearchParams(location.search);
+    const choices = ["np", "tape", "side", "none"];
+    let ribbon = params.get("ribbon");
+    if (!choices.includes(ribbon)) ribbon = "np";
+    const picker = document.querySelector(".picker");
+    function setRibbon(r) {
+      document.body.dataset.ribbon = r;
+      picker.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.pick === r));
+      const p = new URLSearchParams(location.search);
+      p.set("ribbon", r);
+      history.replaceState(null, "", "?" + p.toString());
+    }
+    if (params.has("try")) {
+      picker.hidden = false;
+      picker.addEventListener("click", e => { const b = e.target.closest("[data-pick]"); if (b) setRibbon(b.dataset.pick); });
+      setRibbon(ribbon);
+    } else {
+      document.body.dataset.ribbon = ribbon;
+    }
+
+    // A: now playing follows whichever sher is on screen
+    const np = document.querySelectorAll("[data-np]");
+    function nowPlaying(track) {
+      const html = track ? "<b>now playing</b>" + track : "<b>ek shaam</b>Shruti ke naam ✦ happy birthday";
+      np.forEach(s => { s.innerHTML = html; });
+    }
+    nowPlaying(null);
+    if ("IntersectionObserver" in window) {
+      const npo = new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting) nowPlaying(e.target.dataset.track);
+      }), { rootMargin: "-45% 0px -45% 0px" });
+      items.forEach(el => npo.observe(el));
+    }
+
+    // C: side ribbon slides with the scroll
+    const side = document.querySelector("[data-side]");
+    let ticking = false;
+    addEventListener("scroll", () => {
+      if (ticking || document.body.dataset.ribbon !== "side") return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        side.style.transform = "translateY(" + (-scrollY * 0.5) + "px)";
+        ticking = false;
+      });
+    }, { passive: true });
 
     // dust drifting in lamplight
     if (reduce) return;
