@@ -3,22 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Janamdin Mubarak</title>
-<meta name="theme-color" content="#1b1418">
+<title>Ek Shaam Shruti Ke Naam</title>
+<meta name="theme-color" content="#1e0f16">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Kalam:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Tiro+Devanagari+Hindi:ital@0;1&family=Kalam:wght@400&display=swap">
 <style>
-  /* Layout: a single quiet column, like pages of an old shayari diary read at night. */
+  /* Layout: a ghazal night. One lamplit column, an old record at the top, shers like tracks on its sleeve. */
   :root {
-    --night: #1b1418;
-    --ivory: #efe4d4;
-    --muted: #9c8c90;
-    --candle: #dcae6e;
-    --rule: rgba(239, 228, 212, 0.12);
-    --paper: #f6f1e7;
+    --wine: #1e0f16;
+    --wine-2: #2a1520;
+    --ivory: #f1e4d0;
+    --muted: #a8918f;
+    --gold: #d9a95f;
+    --rose: #c9707f;
+    --rule: rgba(217, 169, 95, 0.22);
+    --paper: #f6f0e4;
     --paper-ink: #2b2326;
 
+    --f-display: "Rozha One", "Tiro Devanagari Hindi", Georgia, serif;
     --f-body: "Tiro Devanagari Hindi", Georgia, "Times New Roman", serif;
     --f-hand: "Kalam", "Segoe Print", "Bradley Hand", cursive;
 
@@ -28,7 +31,7 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   body {
-    background: var(--night);
+    background: var(--wine);
     color: var(--ivory);
     font-family: var(--f-body);
     font-size: 1.0625rem;
@@ -37,104 +40,198 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /* lamp glow from above + film grain */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(80% 45% at 50% -5%, rgba(217, 169, 95, 0.22), transparent 70%),
+      radial-gradient(70% 40% at 50% 110%, rgba(201, 112, 127, 0.14), transparent 70%),
+      linear-gradient(var(--wine), var(--wine-2));
+  }
+  body::after {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    opacity: .5;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 .9  0 0 0 0 .8  0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  #dust { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
   main {
+    position: relative; z-index: 2;
     max-width: 26rem;
     margin: 0 auto;
     padding-left: max(24px, env(safe-area-inset-left, 0px));
     padding-right: max(24px, env(safe-area-inset-right, 0px));
-    padding-top: calc(5rem + env(safe-area-inset-top, 0px));
+    padding-top: calc(3.5rem + env(safe-area-inset-top, 0px));
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
-    display: flex; flex-direction: column; gap: 4.5rem;
+    display: flex; flex-direction: column; gap: 4rem;
   }
 
-  h1 {
+  /* ---------- hero ---------- */
+  .hero { display: flex; flex-direction: column; align-items: center; gap: 1.8rem; text-align: center; }
+
+  .record {
+    width: min(68vw, 15rem);
+    aspect-ratio: 1;
+    max-width: 100%;
+    border-radius: 50%;
+    position: relative;
+    background:
+      radial-gradient(circle, #0c0609 0 3%, transparent 3.5%),
+      radial-gradient(circle, var(--rose) 0 30%, transparent 30.5%),
+      repeating-radial-gradient(circle, #140a0e 0 2px, #1c1015 2px 4px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, .55), inset 0 0 0 1px rgba(255,255,255,.04);
+    animation: spin 9s linear infinite;
+  }
+  .record::after { /* light catching the grooves */
+    content: "";
+    position: absolute; inset: 0; border-radius: 50%;
+    background: conic-gradient(from 20deg, transparent 0 8%, rgba(241,228,208,.10) 12%, transparent 18% 55%, rgba(241,228,208,.07) 60%, transparent 66%);
+  }
+  .record .lbl {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: var(--f-body); font-style: italic;
+    color: var(--wine);
+    font-size: .78rem; line-height: 1.2;
+    z-index: 1;
+  }
+  .record .lbl b { font-family: var(--f-display); font-style: normal; font-weight: 400; font-size: 1.15rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .eyebrow {
     margin: 0;
-    font-weight: 400;
-    font-size: 2.6rem;
-    line-height: 1.2;
+    font-size: .8rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold);
   }
-  .sub { margin: .5rem 0 0; font-style: italic; color: var(--muted); }
-  .sub b { font-weight: 400; font-style: normal; color: var(--candle); }
+  h1 {
+    margin: .3rem 0 0;
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 12vw, 3.1rem);
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--gold); }
 
-  .intro { margin: 0; color: var(--muted); font-style: italic; }
+  .intro { margin: 0; color: var(--muted); font-style: italic; text-align: center; }
 
-  .sher { margin: 0; display: flex; flex-direction: column; gap: .6rem; transition: opacity 1.2s ease; }
-  .js .sher:not(.in) { opacity: .35; }
-  .sher p { margin: 0; font-size: 1.35rem; line-height: 1.65; text-wrap: balance; }
-  .sher cite { font-style: normal; font-size: .85rem; color: var(--candle); opacity: .8; }
+  /* ---------- shers ---------- */
+  .sher {
+    margin: 0;
+    display: flex; flex-direction: column; gap: .7rem;
+    text-align: center;
+    transition: opacity 1.4s ease, transform 1.4s ease;
+  }
+  .js .sher:not(.in) { opacity: .3; transform: translateY(10px); }
+  .sher p { margin: 0; font-size: 1.3rem; line-height: 1.7; text-wrap: balance; }
+  .sher p span { display: block; }
+  .sher p span + span { color: var(--gold); }
+  .sher cite { font-style: italic; font-size: .88rem; color: var(--muted); }
 
-  .note { margin: 0; border-top: 1px solid var(--rule); padding-top: 2rem; }
-  .note .sign { display: block; margin-top: .6rem; color: var(--muted); font-style: italic; }
+  .divider { display: flex; align-items: center; gap: .8rem; color: var(--gold); opacity: .7; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
 
+  .note { margin: 0; text-align: center; font-style: italic; color: var(--ivory); opacity: .9; }
+
+  /* ---------- polaroid ---------- */
   .polaroid {
-    margin: 0 auto;
+    margin: 1rem auto 0;
     width: 100%;
-    max-width: 18rem;
+    max-width: 17rem;
     background: var(--paper);
     color: var(--paper-ink);
     padding: .8rem .8rem 1.2rem;
     transform: rotate(-3deg);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, .45);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .5);
+    position: relative;
   }
-  .polaroid .photo {
-    aspect-ratio: 1;
-    max-width: 100%;
-    background: #e9e2d3;
-    overflow: hidden;
+  .polaroid::before { /* tape */
+    content: "";
+    position: absolute; top: -.7rem; left: 50%;
+    width: 5.5rem; height: 1.5rem;
+    transform: translateX(-50%) rotate(4deg);
+    background: rgba(217, 169, 95, .55);
+    box-shadow: 0 1px 3px rgba(0,0,0,.2);
   }
+  .polaroid .photo { aspect-ratio: 1; max-width: 100%; background: #e9e2d3; overflow: hidden; }
   .polaroid img { width: 100%; height: 100%; object-fit: contain; display: block; }
-  .polaroid figcaption {
-    font-family: var(--f-hand);
-    font-size: 1.05rem;
-    line-height: 1.45;
-    margin-top: .9rem;
-  }
+  .polaroid figcaption { font-family: var(--f-hand); font-size: 1.05rem; line-height: 1.45; margin-top: .9rem; }
 
   .joke { margin: 0; text-align: center; color: var(--muted); font-size: .95rem; }
 
+  /* ---------- closing ---------- */
   .closing {
     margin: 0;
     padding-top: 6rem;
-    font-size: 2.3rem;
-    line-height: 1.25;
-    text-wrap: balance;
+    display: flex; flex-direction: column; gap: .6rem;
   }
-  .closing span { color: var(--candle); }
+  .closing .big {
+    margin: 0;
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 13vw, 3.3rem);
+    line-height: 1.05;
+  }
+  .closing .big em { font-style: normal; color: var(--gold); }
+  .closing .line { margin: 0; font-size: 1.6rem; line-height: 1.35; text-wrap: balance; }
 
   @media (prefers-reduced-motion: reduce) {
+    .record { animation: none; }
     .sher { transition: none; }
-    .js .sher:not(.in) { opacity: 1; }
+    .js .sher:not(.in) { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
+<canvas id="dust" aria-hidden="true"></canvas>
+
 <main>
-  <header>
-    <h1>Janamdin Mubarak</h1>
-    <p class="sub"><b data-name>tum</b></p>
+  <header class="hero">
+    <div class="record" aria-hidden="true">
+      <div class="lbl"><b>Shruti</b>side A</div>
+    </div>
+    <div>
+      <p class="eyebrow">ghazalon ki ek chhoti si mehfil</p>
+      <h1>Ek Shaam <em>Shruti</em> Ke Naam</h1>
+    </div>
   </header>
 
   <p class="intro">I am not a shayar, so I have gathered some of these. Hope you like it.</p>
 
   <blockquote class="sher">
-    <p>Tumko dekha toh ye khayal aaya,<br>zindagi dhoop, tum ghana saaya</p>
-    <cite>Javed Akhtar · Jagjit Singh</cite>
+    <p><span>Hazaaron khwahishein aisi ki har khwahish pe dam nikle,</span><span>bahut nikle mere armaan lekin phir bhi kam nikle</span></p>
+    <cite>Mirza Ghalib</cite>
   </blockquote>
+
+  <div class="divider" aria-hidden="true">✦</div>
 
   <blockquote class="sher">
-    <p>Unke dekhe se jo aa jaati hai munh par raunaq,<br>woh samajhte hain ki beemar ka haal achha hai</p>
-    <cite>Ghalib</cite>
+    <p><span>Magar mujhko lauta do bachpan ka saawan,</span><span>woh kaagaz ki kashti, woh baarish ka paani</span></p>
+    <cite>Sudarshan Faakir · Jagjit Singh</cite>
   </blockquote>
+
+  <div class="divider" aria-hidden="true">✦</div>
 
   <blockquote class="sher">
-    <p>Baar baar din ye aaye,<br>tum jiyo hazaaron saal</p>
-    <cite>Hasrat Jaipuri · 1967</cite>
+    <p><span>Dil-e-naadaan tujhe hua kya hai,</span><span>aakhir is dard ki dawa kya hai</span></p>
+    <cite>Mirza Ghalib</cite>
   </blockquote>
 
-  <p class="note">
-    Bas itna hi. Ye saal tumhe utna hi khush rakhe jitna tum sabko rakhti ho.
-    <span class="sign" data-from></span>
-  </p>
+  <div class="divider" aria-hidden="true">✦</div>
+
+  <blockquote class="sher">
+    <p><span>Ghar se masjid hai bahut door chalo yun kar lein,</span><span>kisi rote hue bachche ko hansaya jaaye</span></p>
+    <cite>Nida Fazli</cite>
+  </blockquote>
+
+  <p class="note">Bas itna hi. Ye saal tumhe utna hi khush rakhe jitna tum sabko rakhti ho.</p>
 
   <figure class="polaroid">
     <div class="photo">
@@ -143,35 +240,22 @@
     <figcaption>Can't wait to see this horseman talk about how the universe is a cruel, uncaring void. 😂</figcaption>
   </figure>
 
-  <p class="joke">&lt; insert 9-11 joke &gt;</p>
+  <p class="joke">&lt; insert 9-11 joke that makes cute girls laugh &gt;</p>
 
-  <p class="closing">Happy birthday, <span>I'll try to keep your no-cry streak going.</span></p>
+  <section class="closing">
+    <p class="big">Happy birthday, <em>Shruti.</em></p>
+    <p class="line">I'll try to keep your no-cry streak going.</p>
+  </section>
 </main>
 
 <script>
-  // Her name and your sign-off. Her name can also go at the end of the link, e.g. #Riya
-  const CONFIG = { name: "", from: "" };
-
   (function () {
     document.documentElement.classList.add("js");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let name = CONFIG.name;
-    try {
-      const h = decodeURIComponent((location.hash || "").slice(1)).replace(/[_~.-]+/g, " ").trim();
-      if (h) name = h;
-    } catch (e) {}
-    if (name) {
-      name = name.replace(/\b\w/g, c => c.toUpperCase());
-      document.querySelectorAll("[data-name]").forEach(el => { el.textContent = name; });
-    } else {
-      document.querySelectorAll(".sub").forEach(el => el.remove());
-    }
-    document.querySelectorAll("[data-from]").forEach(el => {
-      if (CONFIG.from) el.textContent = "~ " + CONFIG.from; else el.remove();
-    });
-
+    // shers come up out of the dark as she scrolls
     const items = document.querySelectorAll(".sher");
-    if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if ("IntersectionObserver" in window && !reduce) {
       const io = new IntersectionObserver(es => es.forEach(e => {
         if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
       }), { threshold: 0.4 });
@@ -179,6 +263,42 @@
     } else {
       items.forEach(el => el.classList.add("in"));
     }
+
+    // dust drifting in lamplight
+    if (reduce) return;
+    const cv = document.getElementById("dust");
+    const ctx = cv.getContext("2d");
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    let W, H;
+    const motes = [];
+    function resize() {
+      W = innerWidth; H = innerHeight;
+      cv.width = W * dpr; cv.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    addEventListener("resize", resize);
+    for (let i = 0; i < 26; i++) {
+      motes.push({
+        x: Math.random() * W, y: Math.random() * H,
+        r: .6 + Math.random() * 1.6,
+        vx: (Math.random() - .5) * .12, vy: -.05 - Math.random() * .15,
+        t: Math.random() * 6.28, a: .15 + Math.random() * .35
+      });
+    }
+    (function tick() {
+      ctx.clearRect(0, 0, W, H);
+      for (const m of motes) {
+        m.t += .01;
+        m.x += m.vx + Math.sin(m.t) * .08;
+        m.y += m.vy;
+        if (m.y < -5) { m.y = H + 5; m.x = Math.random() * W; }
+        if (m.x < -5) m.x = W + 5; else if (m.x > W + 5) m.x = -5;
+        ctx.fillStyle = "rgba(217,169,95," + (m.a * (.6 + .4 * Math.sin(m.t * 2))) + ")";
+        ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, 6.283); ctx.fill();
+      }
+      requestAnimationFrame(tick);
+    })();
   })();
 </script>
 </body>
