@@ -182,74 +182,72 @@
   .closing .big em { font-style: normal; color: var(--gold); }
   .closing .line { margin: 0; font-size: 1.6rem; line-height: 1.35; text-wrap: balance; }
 
-  /* ---------- ribbons ---------- */
-  .ribbon { display: none; position: fixed; z-index: 4; pointer-events: none; }
-  body[data-ribbon="np"] .ribbon-np,
-  body[data-ribbon="tape"] .ribbon-tape,
-  body[data-ribbon="side"] .ribbon-side { display: flex; }
-  body[data-ribbon="np"] main { padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px)); }
-  body[data-ribbon="tape"] main { padding-bottom: calc(10rem + env(safe-area-inset-bottom, 0px)); }
-  body[data-ribbon="side"] main { padding-right: max(44px, calc(env(safe-area-inset-right, 0px) + 32px)); }
+  /* ---------- scroll ribbons ---------- */
+  .rb { display: none; }
+  body[data-ribbon="reel"] .rb-reel,
+  body[data-ribbon="drift"] .rb-drift { display: flex; }
+  body[data-ribbon="silk"] .rb-silk { display: block; }
+  body[data-ribbon="reel"] main,
+  body[data-ribbon="drift"] main { padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px)); }
 
-  .track { display: inline-flex; white-space: nowrap; animation: marquee 22s linear infinite; }
-  .track span { padding-right: 2.5rem; }
-  @keyframes marquee { to { transform: translateX(-50%); } }
+  /* silk: a gift ribbon that unrolls down the page and ties a bow over the last line */
+  .rb-silk { position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none; overflow: visible; }
+  main > :not(.rb-silk) { position: relative; z-index: 1; }
+  .silk { opacity: .5; }
+  .silk-edge { fill: none; stroke: var(--gold); stroke-width: 19; stroke-linecap: round; opacity: .55; }
+  .silk-band { fill: none; stroke: var(--rose); stroke-width: 15; stroke-linecap: round; }
+  .silk-text { fill: var(--wine); font-family: var(--f-body); font-style: italic; font-size: 10px; letter-spacing: .14em; dominant-baseline: central; }
+  .bow-in { transform-box: fill-box; transform-origin: 50% 20%; transform: scale(.2); opacity: 0; transition: transform .9s cubic-bezier(.3, 1.5, .5, 1), opacity .6s ease; }
+  .bow-in path, .bow-in circle { fill: var(--rose); stroke: var(--gold); stroke-width: 1; }
+  .tied .bow-in { transform: scale(1); opacity: .9; }
 
-  /* A: now playing */
-  .ribbon-np {
-    left: 0; right: 0; bottom: 0;
-    align-items: center; gap: .8rem;
-    padding: .7rem max(16px, env(safe-area-inset-right, 0px)) calc(.7rem + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
-    background: rgba(20, 9, 14, .88);
+  /* reel: cassette reels that wind from left to right as she scrolls */
+  .rb-reel {
+    position: fixed; z-index: 4;
+    left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    align-items: center; gap: .85rem;
+    padding: .55rem 1.1rem .55rem .7rem;
+    background: rgba(20, 9, 14, .9);
+    border: 1px solid var(--rule); border-radius: 999px;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border-top: 1px solid var(--rule);
-    font-size: .92rem;
-    color: var(--ivory);
-  }
-  .np-disc {
-    flex: none; width: 2rem; height: 2rem; border-radius: 50%;
-    background: radial-gradient(circle, #0c0609 0 8%, var(--rose) 9% 32%, transparent 33%), repeating-radial-gradient(circle, #140a0e 0 1px, #24141b 1px 2px);
-    animation: spin 4s linear infinite;
-  }
-  .np-text {
-    flex: 1; min-width: 0; overflow: hidden;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  }
-  .np-text .track { animation-duration: 14s; }
-  .np-text b { color: var(--gold); font-weight: 400; font-style: italic; margin-right: .4rem; }
-
-  /* B: crossed tapes */
-  .ribbon-tape { left: 0; right: 0; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); height: 6rem; overflow: hidden; }
-  .tape {
-    position: absolute; left: -10%; right: -10%;
-    overflow: hidden;
-    padding: .45rem 0;
-    font-size: .8rem; letter-spacing: .18em; text-transform: uppercase;
-    box-shadow: 0 6px 16px rgba(0,0,0,.4);
-  }
-  .tape.t1 { top: 1.6rem; transform: rotate(-4deg); background: var(--gold); color: var(--wine); }
-  .tape.t2 { top: 1.6rem; transform: rotate(4deg); background: var(--rose); color: var(--wine); }
-  .tape.t2 .track { animation-direction: reverse; animation-duration: 26s; }
-
-  /* C: side ribbon */
-  .ribbon-side {
-    top: 0; bottom: 0; right: env(safe-area-inset-right, 0px);
-    width: 28px;
-    background: var(--gold);
-    color: var(--wine);
-    overflow: hidden;
-    justify-content: center;
-    align-items: flex-start;
-  }
-  .side-track {
-    writing-mode: vertical-rl;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+    pointer-events: none;
     white-space: nowrap;
-    font-size: .78rem; letter-spacing: .2em; text-transform: uppercase;
-    line-height: 28px;
-    will-change: transform;
   }
+  .reels { position: relative; width: 5.4rem; height: 2.4rem; flex: none; }
+  .reel-w { position: absolute; top: 0; width: 2.4rem; height: 2.4rem; display: flex; align-items: center; justify-content: center; }
+  .reel-w.l { left: 0; }
+  .reel-w.r { right: 0; }
+  .pack { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, #6b4433 0 55%, #3f271d 56% 100%); transform: scale(var(--s, 1)); }
+  .hub {
+    position: relative; width: 1rem; height: 1rem; border-radius: 50%;
+    background: conic-gradient(var(--ivory) 0 10%, transparent 10% 33%, var(--ivory) 33% 43%, transparent 43% 66%, var(--ivory) 66% 76%, transparent 76%);
+    border: 2px solid var(--ivory);
+  }
+  .tapeline { position: absolute; left: 1.2rem; right: 1.2rem; bottom: .05rem; height: 2px; background: #3f271d; }
+  .reel-meta { display: flex; flex-direction: column; line-height: 1.3; font-size: .8rem; }
+  .reel-meta b { font-weight: 400; font-style: italic; color: var(--gold); }
+  .reel-meta span { color: var(--muted); font-variant-numeric: tabular-nums; }
 
+  /* drift: a band that only moves when she scrolls, and leans with her speed */
+  .rb-drift {
+    position: fixed; z-index: 4; left: 0; right: 0;
+    bottom: calc(.5rem + env(safe-area-inset-bottom, 0px));
+    height: 6rem; overflow: hidden; pointer-events: none;
+  }
+  .drift-band {
+    position: absolute; left: -10%; right: -10%; top: 50%;
+    transform: translateY(-50%) rotate(-4deg);
+    background: var(--gold); color: var(--wine);
+    padding: .5rem 0;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .45);
+  }
+  .drift-track { display: inline-flex; white-space: nowrap; font-family: var(--f-display); font-size: 1.1rem; line-height: 1.3; will-change: transform; }
+  .drift-track span { padding-right: 1.4rem; }
+
+  [hidden] { display: none !important; }
   .picker {
     position: fixed; z-index: 5;
     top: calc(12px + env(safe-area-inset-top, 0px)); left: max(12px, env(safe-area-inset-left, 0px));
@@ -265,7 +263,7 @@
   .picker button:focus-visible { outline: 2px solid var(--ivory); outline-offset: 2px; }
 
   @media (prefers-reduced-motion: reduce) {
-    .track, .np-disc { animation: none; }
+    .bow-in { transition: none; }
     .record { animation: none; }
     .sher { transition: none; }
     .js .sher:not(.in) { opacity: 1; transform: none; }
@@ -276,6 +274,7 @@
 <canvas id="dust" aria-hidden="true"></canvas>
 
 <main>
+  <svg class="rb rb-silk" aria-hidden="true"></svg>
   <header class="hero">
     <div class="record" aria-hidden="true">
       <div class="lbl"><b>Shruti</b>side A</div>
@@ -331,28 +330,26 @@
   </section>
 </main>
 
-<!-- Ribbon A: now-playing bar that follows the sher on screen -->
-<div class="ribbon ribbon-np" aria-hidden="true">
-  <div class="np-disc"></div>
-  <div class="np-text"><div class="track"><span data-np></span><span data-np></span></div></div>
+<!-- reel: cassette reels that wind as she scrolls -->
+<div class="rb rb-reel" aria-hidden="true">
+  <div class="reels">
+    <div class="tapeline"></div>
+    <div class="reel-w l"><div class="pack"></div><div class="hub"></div></div>
+    <div class="reel-w r"><div class="pack"></div><div class="hub"></div></div>
+  </div>
+  <div class="reel-meta"><b>Ek shaam Shruti ke naam</b><span data-clock>side A · 0:00 / 30:00</span></div>
 </div>
 
-<!-- Ribbon B: two crossed festive tapes at the bottom -->
-<div class="ribbon ribbon-tape" aria-hidden="true">
-  <div class="tape t1"><div class="track"><span>Happy birthday Shruti ✦ Janamdin mubarak ✦ Ek shaam Shruti ke naam ✦ </span><span>Happy birthday Shruti ✦ Janamdin mubarak ✦ Ek shaam Shruti ke naam ✦ </span></div></div>
-  <div class="tape t2"><div class="track"><span>Afreen afreen ✦ Maza aa gaya ✦ Halka halka suroor ✦ </span><span>Afreen afreen ✦ Maza aa gaya ✦ Halka halka suroor ✦ </span></div></div>
-</div>
-
-<!-- Ribbon C: vertical ribbon on the right edge, moves with the scroll -->
-<div class="ribbon ribbon-side" aria-hidden="true">
-  <div class="side-track" data-side>Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦ Ek shaam Shruti ke naam ✦ Happy birthday ✦</div>
+<!-- drift: a band that only moves when she scrolls -->
+<div class="rb rb-drift" aria-hidden="true">
+  <div class="drift-band"><div class="drift-track"><span>Happy birthday Shruti ✦ Janamdin mubarak ✦</span><span>Happy birthday Shruti ✦ Janamdin mubarak ✦</span><span>Happy birthday Shruti ✦ Janamdin mubarak ✦</span><span>Happy birthday Shruti ✦ Janamdin mubarak ✦</span></div></div>
 </div>
 
 <!-- Only shows when the link ends in ?try -->
 <div class="picker" hidden>
-  <button type="button" data-pick="np">A</button>
-  <button type="button" data-pick="tape">B</button>
-  <button type="button" data-pick="side">C</button>
+  <button type="button" data-pick="silk">silk</button>
+  <button type="button" data-pick="reel">reel</button>
+  <button type="button" data-pick="drift">drift</button>
   <button type="button" data-pick="none">off</button>
 </div>
 
@@ -372,52 +369,124 @@
       items.forEach(el => el.classList.add("in"));
     }
 
-    // ---- ribbons: ?ribbon=np|tape|side|none picks one, ?try shows the switcher ----
+    // ---- scroll ribbons: ?ribbon=silk|reel|drift|none picks one, ?try shows the switcher ----
     const params = new URLSearchParams(location.search);
-    const choices = ["np", "tape", "side", "none"];
-    let ribbon = params.get("ribbon");
-    if (!choices.includes(ribbon)) ribbon = "np";
+    const choices = ["silk", "reel", "drift", "none"];
+    let ribbon = choices.includes(params.get("ribbon")) ? params.get("ribbon") : "silk";
     const picker = document.querySelector(".picker");
+    const ease = reduce ? 1 : 0.12;
+
     function setRibbon(r) {
+      ribbon = r;
       document.body.dataset.ribbon = r;
-      picker.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.pick === r));
+      picker.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.pick === r)));
       const p = new URLSearchParams(location.search);
       p.set("ribbon", r);
       history.replaceState(null, "", "?" + p.toString());
+      if (r === "silk") buildSilk();
     }
+
+    const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
+
+    // reel
+    const hubs = document.querySelectorAll(".hub");
+    const packL = document.querySelector(".reel-w.l .pack");
+    const packR = document.querySelector(".reel-w.r .pack");
+    const clock = document.querySelector("[data-clock]");
+    function drawReel(y) {
+      const p = Math.min(1, Math.max(0, y / maxScroll()));
+      hubs.forEach(h => { h.style.transform = "rotate(" + (y * 0.9) + "deg)"; });
+      packL.style.setProperty("--s", (1 - p * 0.55).toFixed(3));
+      packR.style.setProperty("--s", (0.45 + p * 0.55).toFixed(3));
+      const secs = Math.round(p * 1800);
+      clock.textContent = "side A · " + Math.floor(secs / 60) + ":" + String(secs % 60).padStart(2, "0") + " / 30:00";
+    }
+
+    // drift
+    const drift = document.querySelector(".drift-track");
+    let skew = 0;
+    function drawDrift(y, v) {
+      const unit = drift.firstElementChild.offsetWidth || 1;
+      const target = reduce ? 0 : Math.max(-14, Math.min(14, v * 0.5));
+      skew += (target - skew) * 0.15;
+      const x = -((((y * 0.9) % unit) + unit) % unit);
+      drift.style.transform = "translateX(" + x + "px) skewX(" + (-skew).toFixed(2) + "deg)";
+    }
+
+    // silk
+    const mainEl = document.querySelector("main");
+    const silk = document.querySelector(".rb-silk");
+    let silkMask = null, silkLen = 0, silkY0 = 0, silkY1 = 1, silkShown = 0;
+    function buildSilk() {
+      const W = mainEl.clientWidth, H = mainEl.scrollHeight;
+      const hero = document.querySelector(".hero");
+      const closing = document.querySelector(".closing");
+      const y0 = hero.offsetTop + hero.offsetHeight + 16;
+      const y1 = closing.offsetTop + parseFloat(getComputedStyle(closing).paddingTop) - 72;
+      const n = Math.max(2, Math.round((y1 - y0) / 380));
+      const d = (y1 - y0) / n;
+      let x = W * 0.86, y = y0, path = "M" + x + " " + y;
+      for (let i = 1; i <= n; i++) {
+        const nx = i === n ? W / 2 : (i % 2 ? W * 0.12 : W * 0.88);
+        const ny = y0 + d * i;
+        path += " C" + x + " " + (y + d * 0.55) + " " + nx + " " + (ny - d * 0.55) + " " + nx + " " + ny;
+        x = nx; y = ny;
+      }
+      silk.setAttribute("width", W);
+      silk.setAttribute("height", H);
+      silk.setAttribute("viewBox", "0 0 " + W + " " + H);
+      silk.innerHTML =
+        '<defs><mask id="silkMask" maskUnits="userSpaceOnUse" x="-20" y="0" width="' + (W + 40) + '" height="' + H + '">' +
+          '<path class="silk-mask" d="' + path + '" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round"/></mask></defs>' +
+        '<g class="silk" mask="url(#silkMask)">' +
+          '<path class="silk-edge" d="' + path + '"/>' +
+          '<path id="silkPath" class="silk-band" d="' + path + '"/>' +
+          '<text class="silk-text"><textPath href="#silkPath"></textPath></text>' +
+        '</g>' +
+        '<g transform="translate(' + (W / 2) + ' ' + y1 + ')"><g class="bow-in">' +
+          '<path d="M-3 3 L-24 50 L-12 45 L-5 56 Z"/><path d="M3 3 L24 50 L12 45 L5 56 Z"/>' +
+          '<path d="M0 0 C-42 -36 -74 -6 -48 15 C-31 27 -12 11 0 0 Z"/><path d="M0 0 C42 -36 74 -6 48 15 C31 27 12 11 0 0 Z"/>' +
+          '<circle r="7"/></g></g>';
+      silkMask = silk.querySelector(".silk-mask");
+      silkLen = silkMask.getTotalLength();
+      silkMask.style.strokeDasharray = silkLen;
+      silk.querySelector("textPath").textContent = "happy birthday shruti  ✦  ".repeat(Math.ceil(silkLen / 150));
+      silkY0 = y0; silkY1 = y1;
+    }
+    function drawSilk(y) {
+      if (!silkMask) return;
+      const top = mainEl.getBoundingClientRect().top + y;
+      const target = Math.min(1, Math.max(0, (y + innerHeight * 0.7 - top - silkY0) / (silkY1 - silkY0)));
+      silkShown += (target - silkShown) * ease;
+      silkMask.style.strokeDashoffset = silkLen * (1 - silkShown);
+      silk.classList.toggle("tied", silkShown > 0.985);
+    }
+    let rebuild = 0;
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(() => {
+        clearTimeout(rebuild);
+        rebuild = setTimeout(() => { if (ribbon === "silk") buildSilk(); }, 150);
+      }).observe(mainEl);
+    }
+
+    document.body.dataset.ribbon = ribbon;
     if (params.has("try")) {
       picker.hidden = false;
       picker.addEventListener("click", e => { const b = e.target.closest("[data-pick]"); if (b) setRibbon(b.dataset.pick); });
       setRibbon(ribbon);
-    } else {
-      document.body.dataset.ribbon = ribbon;
+    } else if (ribbon === "silk") {
+      buildSilk();
     }
 
-    // A: now playing follows whichever sher is on screen
-    const np = document.querySelectorAll("[data-np]");
-    function nowPlaying(track) {
-      const html = track ? "<b>now playing</b>" + track : "<b>ek shaam</b>Shruti ke naam ✦ happy birthday";
-      np.forEach(s => { s.innerHTML = html; });
-    }
-    nowPlaying(null);
-    if ("IntersectionObserver" in window) {
-      const npo = new IntersectionObserver(es => es.forEach(e => {
-        if (e.isIntersecting) nowPlaying(e.target.dataset.track);
-      }), { rootMargin: "-45% 0px -45% 0px" });
-      items.forEach(el => npo.observe(el));
-    }
-
-    // C: side ribbon slides with the scroll
-    const side = document.querySelector("[data-side]");
-    let ticking = false;
-    addEventListener("scroll", () => {
-      if (ticking || document.body.dataset.ribbon !== "side") return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        side.style.transform = "translateY(" + (-scrollY * 0.5) + "px)";
-        ticking = false;
-      });
-    }, { passive: true });
+    let lastY = scrollY;
+    (function ribbonTick() {
+      const y = scrollY;
+      if (ribbon === "reel") drawReel(y);
+      else if (ribbon === "drift") drawDrift(y, y - lastY);
+      else if (ribbon === "silk") drawSilk(y);
+      lastY = y;
+      requestAnimationFrame(ribbonTick);
+    })();
 
     // dust drifting in lamplight
     if (reduce) return;
