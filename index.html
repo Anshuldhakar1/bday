@@ -29,6 +29,7 @@
   }
 
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   html, body { margin: 0; }
   body {
     background: var(--wine);
@@ -69,7 +70,7 @@
     padding-left: max(24px, env(safe-area-inset-left, 0px));
     padding-right: max(24px, env(safe-area-inset-right, 0px));
     padding-top: calc(3.5rem + env(safe-area-inset-top, 0px));
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px));
     display: flex; flex-direction: column; gap: 4rem;
   }
 
@@ -150,7 +151,6 @@
     padding: .8rem .8rem 1.2rem;
     transform: rotate(-3deg);
     box-shadow: 0 16px 34px rgba(0, 0, 0, .5);
-    position: relative;
   }
   .polaroid::before { /* tape */
     content: "";
@@ -182,39 +182,36 @@
   .closing .big em { font-style: normal; color: var(--gold); }
   .closing .line { margin: 0; font-size: 1.6rem; line-height: 1.35; text-wrap: balance; }
 
-  /* ---------- scroll ribbons ---------- */
-  .rb { display: none; }
-  body[data-ribbon="reel"] .rb-reel,
-  body[data-ribbon="drift"] .rb-drift { display: flex; }
-  body[data-ribbon="silk"] .rb-silk { display: block; }
-  body[data-ribbon="reel"] main,
-  body[data-ribbon="drift"] main { padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px)); }
+  /* ---------- silk: a faint ribbon behind everything that unrolls as she scrolls ---------- */
+  .silk-svg { position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none; overflow: visible; }
+  main > :not(.silk-svg) { position: relative; z-index: 1; }
+  .silk { opacity: .16; filter: blur(.6px); }
+  .silk-band { fill: none; stroke: var(--rose); stroke-width: 11; stroke-linecap: round; }
+  .silk-text { fill: var(--wine); font-family: var(--f-body); font-style: italic; font-size: 8px; letter-spacing: .16em; dominant-baseline: central; }
+  .bow-in { transform-box: fill-box; transform-origin: 50% 20%; transform: scale(.3); opacity: 0; transition: transform 1.2s cubic-bezier(.3, 1.4, .5, 1), opacity 1s ease; }
+  .bow-in path, .bow-in circle { fill: var(--rose); }
+  .tied .bow-in { transform: scale(1); opacity: .28; }
 
-  /* silk: a gift ribbon that unrolls down the page and ties a bow over the last line */
-  .rb-silk { position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none; overflow: visible; }
-  main > :not(.rb-silk) { position: relative; z-index: 1; }
-  .silk { opacity: .5; }
-  .silk-edge { fill: none; stroke: var(--gold); stroke-width: 19; stroke-linecap: round; opacity: .55; }
-  .silk-band { fill: none; stroke: var(--rose); stroke-width: 15; stroke-linecap: round; }
-  .silk-text { fill: var(--wine); font-family: var(--f-body); font-style: italic; font-size: 10px; letter-spacing: .14em; dominant-baseline: central; }
-  .bow-in { transform-box: fill-box; transform-origin: 50% 20%; transform: scale(.2); opacity: 0; transition: transform .9s cubic-bezier(.3, 1.5, .5, 1), opacity .6s ease; }
-  .bow-in path, .bow-in circle { fill: var(--rose); stroke: var(--gold); stroke-width: 1; }
-  .tied .bow-in { transform: scale(1); opacity: .9; }
-
-  /* reel: cassette reels that wind from left to right as she scrolls */
-  .rb-reel {
+  /* ---------- reel: cassette that winds as she scrolls, tap for music ---------- */
+  .reel {
     position: fixed; z-index: 4;
     left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
-    align-items: center; gap: .85rem;
+    display: flex; align-items: center; gap: .85rem;
     padding: .55rem 1.1rem .55rem .7rem;
     background: rgba(20, 9, 14, .9);
     border: 1px solid var(--rule); border-radius: 999px;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
-    pointer-events: none;
     white-space: nowrap;
+    font: inherit; color: var(--ivory); text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color .4s ease;
   }
+  .reel:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .reel:active { transform: translateX(-50%) scale(.97); }
+  .reel.playing { border-color: rgba(217, 169, 95, .55); }
   .reels { position: relative; width: 5.4rem; height: 2.4rem; flex: none; }
   .reel-w { position: absolute; top: 0; width: 2.4rem; height: 2.4rem; display: flex; align-items: center; justify-content: center; }
   .reel-w.l { left: 0; }
@@ -230,42 +227,9 @@
   .reel-meta b { font-weight: 400; font-style: italic; color: var(--gold); }
   .reel-meta span { color: var(--muted); font-variant-numeric: tabular-nums; }
 
-  /* drift: a band that only moves when she scrolls, and leans with her speed */
-  .rb-drift {
-    position: fixed; z-index: 4; left: 0; right: 0;
-    bottom: calc(.5rem + env(safe-area-inset-bottom, 0px));
-    height: 6rem; overflow: hidden; pointer-events: none;
-  }
-  .drift-band {
-    position: absolute; left: -10%; right: -10%; top: 50%;
-    transform: translateY(-50%) rotate(-4deg);
-    background: var(--gold); color: var(--wine);
-    padding: .5rem 0;
-    overflow: hidden;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, .45);
-  }
-  .drift-track { display: inline-flex; white-space: nowrap; font-family: var(--f-display); font-size: 1.1rem; line-height: 1.3; will-change: transform; }
-  .drift-track span { padding-right: 1.4rem; }
-
-  [hidden] { display: none !important; }
-  .picker {
-    position: fixed; z-index: 5;
-    top: calc(12px + env(safe-area-inset-top, 0px)); left: max(12px, env(safe-area-inset-left, 0px));
-    display: flex; gap: 6px;
-  }
-  .picker button {
-    font: inherit; font-size: .8rem;
-    background: rgba(20, 9, 14, .85); color: var(--ivory);
-    border: 1px solid var(--rule); border-radius: 999px;
-    padding: .3rem .75rem; cursor: pointer;
-  }
-  .picker button[aria-pressed="true"] { background: var(--gold); color: var(--wine); }
-  .picker button:focus-visible { outline: 2px solid var(--ivory); outline-offset: 2px; }
-
   @media (prefers-reduced-motion: reduce) {
-    .bow-in { transition: none; }
     .record { animation: none; }
-    .sher { transition: none; }
+    .sher, .bow-in { transition: none; }
     .js .sher:not(.in) { opacity: 1; transform: none; }
   }
 </style>
@@ -274,7 +238,8 @@
 <canvas id="dust" aria-hidden="true"></canvas>
 
 <main>
-  <svg class="rb rb-silk" aria-hidden="true"></svg>
+  <svg class="silk-svg" aria-hidden="true"></svg>
+
   <header class="hero">
     <div class="record" aria-hidden="true">
       <div class="lbl"><b>Shruti</b>side A</div>
@@ -287,28 +252,28 @@
 
   <p class="intro">I am not a shayar, so I have gathered some of these. Hope you like it.</p>
 
-  <blockquote class="sher" data-track="Afreen Afreen · Nusrat Fateh Ali Khan">
+  <blockquote class="sher">
     <p><span>Husn-e-jaana ki taarif mumkin nahi,</span><span>afreen afreen</span></p>
     <cite>Afreen Afreen · Nusrat Fateh Ali Khan</cite>
   </blockquote>
 
   <div class="divider" aria-hidden="true">✦</div>
 
-  <blockquote class="sher" data-track="Mere Rashke Qamar · Nusrat Fateh Ali Khan">
+  <blockquote class="sher">
     <p><span>Mere rashk-e-qamar, tu ne pehli nazar,</span><span>jab nazar se milaayi maza aa gaya</span></p>
     <cite>Mere Rashke Qamar · Nusrat Fateh Ali Khan</cite>
   </blockquote>
 
   <div class="divider" aria-hidden="true">✦</div>
 
-  <blockquote class="sher" data-track="Yeh Jo Halka Halka Suroor Hai · Nusrat Fateh Ali Khan">
+  <blockquote class="sher">
     <p><span>Ye jo halka halka suroor hai,</span><span>ye teri nazar ka qusoor hai</span></p>
     <cite>Yeh Jo Halka Halka Suroor Hai · Nusrat Fateh Ali Khan</cite>
   </blockquote>
 
   <div class="divider" aria-hidden="true">✦</div>
 
-  <blockquote class="sher" data-track="Achha Sila Diya · Attaullah Khan Esakhelvi">
+  <blockquote class="sher">
     <p><span>Achha sila diya tu ne mere pyaar ka,</span><span>yaar ne hi loot liya ghar yaar ka</span></p>
     <cite>Achha Sila Diya · Attaullah Khan Esakhelvi<br>(Attaullah ke bina mehfil adhoori hai, sorry)</cite>
   </blockquote>
@@ -330,28 +295,14 @@
   </section>
 </main>
 
-<!-- reel: cassette reels that wind as she scrolls -->
-<div class="rb rb-reel" aria-hidden="true">
-  <div class="reels">
-    <div class="tapeline"></div>
-    <div class="reel-w l"><div class="pack"></div><div class="hub"></div></div>
-    <div class="reel-w r"><div class="pack"></div><div class="hub"></div></div>
-  </div>
-  <div class="reel-meta"><b>Ek shaam Shruti ke naam</b><span data-clock>side A · 0:00 / 30:00</span></div>
-</div>
-
-<!-- drift: a band that only moves when she scrolls -->
-<div class="rb rb-drift" aria-hidden="true">
-  <div class="drift-band"><div class="drift-track"><span>Happy birthday Shruti ✦ Janamdin mubarak ✦</span><span>Happy birthday Shruti ✦ Janamdin mubarak ✦</span><span>Happy birthday Shruti ✦ Janamdin mubarak ✦</span><span>Happy birthday Shruti ✦ Janamdin mubarak ✦</span></div></div>
-</div>
-
-<!-- Only shows when the link ends in ?try -->
-<div class="picker" hidden>
-  <button type="button" data-pick="silk">silk</button>
-  <button type="button" data-pick="reel">reel</button>
-  <button type="button" data-pick="drift">drift</button>
-  <button type="button" data-pick="none">off</button>
-</div>
+<button class="reel" id="reel" type="button" aria-pressed="false" aria-label="Play music">
+  <span class="reels" aria-hidden="true">
+    <span class="tapeline"></span>
+    <span class="reel-w l"><span class="pack"></span><span class="hub"></span></span>
+    <span class="reel-w r"><span class="pack"></span><span class="hub"></span></span>
+  </span>
+  <span class="reel-meta"><b>Ek shaam Shruti ke naam</b><span data-clock>▶ tap for a little music</span></span>
+</button>
 
 <script>
   (function () {
@@ -369,53 +320,182 @@
       items.forEach(el => el.classList.add("in"));
     }
 
-    // ---- scroll ribbons: ?ribbon=silk|reel|drift|none picks one, ?try shows the switcher ----
-    const params = new URLSearchParams(location.search);
-    const choices = ["silk", "reel", "drift", "none"];
-    let ribbon = choices.includes(params.get("ribbon")) ? params.get("ribbon") : "silk";
-    const picker = document.querySelector(".picker");
-    const ease = reduce ? 1 : 0.12;
+    // ---------- music: music.mp3 if it is in the repo, otherwise a tanpura + santoor in Raag Yaman ----------
+    const Music = (function () {
+      let ctx = null, master = null, room = null, timer = 0, playing = false, file = null, useFile = null;
+      let nextDrone = 0, droneStep = 0, nextNote = 0, idx = 4, phraseLeft = 0;
 
-    function setRibbon(r) {
-      ribbon = r;
-      document.body.dataset.ribbon = r;
-      picker.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.pick === r)));
-      const p = new URLSearchParams(location.search);
-      p.set("ribbon", r);
-      history.replaceState(null, "", "?" + p.toString());
-      if (r === "silk") buildSilk();
-    }
+      const SA = 146.83;                                    // D3
+      const DRONE = [SA * 0.75, SA, SA, SA * 0.5];         // Pa, Sa, Sa, low Sa
+      const YAMAN = [1, 9/8, 5/4, 45/32, 3/2, 5/3, 15/8, 2, 9/4, 5/2]; // Sa Re Ga Ma# Pa Dha Ni Sa' Re' Ga'
 
+      function setup() {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        master = ctx.createGain();
+        master.gain.value = 0;
+        const comp = ctx.createDynamicsCompressor();
+        master.connect(comp).connect(ctx.destination);
+
+        // small room reverb from a decaying noise burst
+        const len = ctx.sampleRate * 2.8, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+        for (let c = 0; c < 2; c++) {
+          const d = ir.getChannelData(c);
+          for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+        }
+        const verb = ctx.createConvolver();
+        verb.buffer = ir;
+        const wet = ctx.createGain();
+        wet.gain.value = 0.45;
+        verb.connect(wet).connect(master);
+        room = verb;
+      }
+
+      function out(node) { node.connect(master); node.connect(room); }
+
+      function tanpura(f, t) {
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.05, t + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.0008, t + 4.4);
+        const lp = ctx.createBiquadFilter();
+        lp.type = "lowpass";
+        lp.frequency.setValueAtTime(2200, t);
+        lp.frequency.exponentialRampToValueAtTime(600, t + 3.5);
+        lp.Q.value = 3;
+        [-4, 0, 5].forEach(det => {
+          const o = ctx.createOscillator();
+          o.type = "sawtooth"; o.frequency.value = f; o.detune.value = det;
+          o.connect(lp); o.start(t); o.stop(t + 4.5);
+        });
+        lp.connect(g); out(g);
+      }
+
+      function santoor(f, t, v) {
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(v, t + 0.006);
+        g.gain.exponentialRampToValueAtTime(0.0008, t + 2.2);
+        [[1, "triangle", 1], [2, "sine", 0.35], [3.01, "sine", 0.12]].forEach(([m, type, a]) => {
+          const o = ctx.createOscillator(), og = ctx.createGain();
+          o.type = type; o.frequency.value = f * m; og.gain.value = a;
+          o.connect(og).connect(g); o.start(t); o.stop(t + 2.3);
+        });
+        out(g);
+        // the santoor's double strike
+        if (Math.random() < 0.35) echo(f, t + 0.11, v * 0.45);
+      }
+      function echo(f, t, v) {
+        const g = ctx.createGain(), o = ctx.createOscillator();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(v, t + 0.006);
+        g.gain.exponentialRampToValueAtTime(0.0008, t + 1.4);
+        o.type = "triangle"; o.frequency.value = f;
+        o.connect(g); out(g); o.start(t); o.stop(t + 1.5);
+      }
+
+      // one step of a slow, wandering Yaman phrase; returns how long until the next note
+      function melodyStep(t) {
+        if (phraseLeft <= 0) {
+          phraseLeft = 4 + Math.floor(Math.random() * 4);
+          return 1.8 + Math.random() * 1.6;              // rest between phrases
+        }
+        santoor(SA * 2 * YAMAN[idx], t, 0.075);
+        phraseLeft--;
+        if (phraseLeft === 0) {
+          idx = [0, 4, 7][Math.floor(Math.random() * 3)]; // phrases come home to Sa or Pa
+          return 1.4;
+        }
+        const moves = [-2, -1, -1, 1, 1, 2];
+        idx = Math.max(0, Math.min(YAMAN.length - 1, idx + moves[Math.floor(Math.random() * moves.length)]));
+        return [0.55, 0.55, 0.8, 1.1][Math.floor(Math.random() * 4)];
+      }
+
+      function schedule() {
+        const ahead = ctx.currentTime + 0.6;
+        while (nextDrone < ahead) { tanpura(DRONE[droneStep % 4], nextDrone); droneStep++; nextDrone += 1.15; }
+        while (nextNote < ahead) nextNote += melodyStep(nextNote);
+      }
+
+      async function hasFile() {
+        if (useFile !== null) return useFile;
+        try { useFile = (await fetch("music.mp3", { method: "HEAD" })).ok; } catch (e) { useFile = false; }
+        return useFile;
+      }
+
+      async function play() {
+        playing = true;
+        try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+        if (!ctx) setup();                               // must happen inside the tap
+        await ctx.resume();
+        if (await hasFile()) {
+          if (!file) { file = new Audio("music.mp3"); file.loop = true; }
+          file.volume = 0.8;
+          await file.play();
+          return;
+        }
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.setTargetAtTime(0.9, ctx.currentTime, 0.8);
+        nextDrone = nextNote = ctx.currentTime + 0.1;
+        clearInterval(timer);
+        timer = setInterval(schedule, 120);
+        schedule();
+      }
+
+      function pause() {
+        playing = false;
+        if (file) file.pause();
+        if (!ctx) return;
+        master.gain.setTargetAtTime(0, ctx.currentTime, 0.4);
+        clearInterval(timer);
+        setTimeout(() => { if (!playing) ctx.suspend(); }, 2000);
+      }
+
+      return { play, pause, get playing() { return playing; } };
+    })();
+
+    // ---------- reel: winds with the scroll, turns on its own while music plays ----------
+    const reelBtn = document.getElementById("reel");
+    const hubs = reelBtn.querySelectorAll(".hub");
+    const packL = reelBtn.querySelector(".reel-w.l .pack");
+    const packR = reelBtn.querySelector(".reel-w.r .pack");
+    const clock = reelBtn.querySelector("[data-clock]");
     const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    let spin = 0, lastY = scrollY, lastT = performance.now();
 
-    // reel
-    const hubs = document.querySelectorAll(".hub");
-    const packL = document.querySelector(".reel-w.l .pack");
-    const packR = document.querySelector(".reel-w.r .pack");
-    const clock = document.querySelector("[data-clock]");
-    function drawReel(y) {
+    function drawReel(y, dt) {
       const p = Math.min(1, Math.max(0, y / maxScroll()));
-      hubs.forEach(h => { h.style.transform = "rotate(" + (y * 0.9) + "deg)"; });
+      spin += (y - lastY) * 0.9 + (Music.playing && !reduce ? dt * 0.09 : 0);
+      hubs.forEach(h => { h.style.transform = "rotate(" + spin + "deg)"; });
       packL.style.setProperty("--s", (1 - p * 0.55).toFixed(3));
       packR.style.setProperty("--s", (0.45 + p * 0.55).toFixed(3));
-      const secs = Math.round(p * 1800);
-      clock.textContent = "side A · " + Math.floor(secs / 60) + ":" + String(secs % 60).padStart(2, "0") + " / 30:00";
+      if (Music.playing) {
+        const secs = Math.round(p * 1800);
+        clock.textContent = "side A · " + Math.floor(secs / 60) + ":" + String(secs % 60).padStart(2, "0") + " / 30:00";
+      }
     }
 
-    // drift
-    const drift = document.querySelector(".drift-track");
-    let skew = 0;
-    function drawDrift(y, v) {
-      const unit = drift.firstElementChild.offsetWidth || 1;
-      const target = reduce ? 0 : Math.max(-14, Math.min(14, v * 0.5));
-      skew += (target - skew) * 0.15;
-      const x = -((((y * 0.9) % unit) + unit) % unit);
-      drift.style.transform = "translateX(" + x + "px) skewX(" + (-skew).toFixed(2) + "deg)";
-    }
+    reelBtn.addEventListener("click", () => {
+      if (Music.playing) {
+        Music.pause();
+        clock.textContent = "▶ tap for a little music";
+        reelBtn.classList.remove("playing");
+        reelBtn.setAttribute("aria-pressed", "false");
+        reelBtn.setAttribute("aria-label", "Play music");
+      } else {
+        Music.play().catch(() => {
+          Music.pause();
+          clock.textContent = "couldn't play, tap again";
+          reelBtn.classList.remove("playing");
+        });
+        reelBtn.classList.add("playing");
+        reelBtn.setAttribute("aria-pressed", "true");
+        reelBtn.setAttribute("aria-label", "Pause music");
+      }
+    });
 
-    // silk
+    // ---------- silk: faint ribbon that unrolls behind the page and ties a bow at the end ----------
     const mainEl = document.querySelector("main");
-    const silk = document.querySelector(".rb-silk");
+    const silk = document.querySelector(".silk-svg");
     let silkMask = null, silkLen = 0, silkY0 = 0, silkY1 = 1, silkShown = 0;
     function buildSilk() {
       const W = mainEl.clientWidth, H = mainEl.scrollHeight;
@@ -437,9 +517,8 @@
       silk.setAttribute("viewBox", "0 0 " + W + " " + H);
       silk.innerHTML =
         '<defs><mask id="silkMask" maskUnits="userSpaceOnUse" x="-20" y="0" width="' + (W + 40) + '" height="' + H + '">' +
-          '<path class="silk-mask" d="' + path + '" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round"/></mask></defs>' +
+          '<path class="silk-mask" d="' + path + '" fill="none" stroke="#fff" stroke-width="24" stroke-linecap="round"/></mask></defs>' +
         '<g class="silk" mask="url(#silkMask)">' +
-          '<path class="silk-edge" d="' + path + '"/>' +
           '<path id="silkPath" class="silk-band" d="' + path + '"/>' +
           '<text class="silk-text"><textPath href="#silkPath"></textPath></text>' +
         '</g>' +
@@ -450,45 +529,32 @@
       silkMask = silk.querySelector(".silk-mask");
       silkLen = silkMask.getTotalLength();
       silkMask.style.strokeDasharray = silkLen;
-      silk.querySelector("textPath").textContent = "happy birthday shruti  ✦  ".repeat(Math.ceil(silkLen / 150));
+      silk.querySelector("textPath").textContent = "happy birthday shruti  ✦  ".repeat(Math.ceil(silkLen / 130));
       silkY0 = y0; silkY1 = y1;
     }
     function drawSilk(y) {
       if (!silkMask) return;
       const top = mainEl.getBoundingClientRect().top + y;
       const target = Math.min(1, Math.max(0, (y + innerHeight * 0.7 - top - silkY0) / (silkY1 - silkY0)));
-      silkShown += (target - silkShown) * ease;
+      silkShown += (target - silkShown) * (reduce ? 1 : 0.08);
       silkMask.style.strokeDashoffset = silkLen * (1 - silkShown);
       silk.classList.toggle("tied", silkShown > 0.985);
     }
+    buildSilk();
     let rebuild = 0;
     if ("ResizeObserver" in window) {
-      new ResizeObserver(() => {
-        clearTimeout(rebuild);
-        rebuild = setTimeout(() => { if (ribbon === "silk") buildSilk(); }, 150);
-      }).observe(mainEl);
+      new ResizeObserver(() => { clearTimeout(rebuild); rebuild = setTimeout(buildSilk, 150); }).observe(mainEl);
     }
 
-    document.body.dataset.ribbon = ribbon;
-    if (params.has("try")) {
-      picker.hidden = false;
-      picker.addEventListener("click", e => { const b = e.target.closest("[data-pick]"); if (b) setRibbon(b.dataset.pick); });
-      setRibbon(ribbon);
-    } else if (ribbon === "silk") {
-      buildSilk();
-    }
+    (function frame(now) {
+      const y = scrollY, dt = Math.min(100, now - lastT);
+      drawReel(y, dt);
+      drawSilk(y);
+      lastY = y; lastT = now;
+      requestAnimationFrame(frame);
+    })(performance.now());
 
-    let lastY = scrollY;
-    (function ribbonTick() {
-      const y = scrollY;
-      if (ribbon === "reel") drawReel(y);
-      else if (ribbon === "drift") drawDrift(y, y - lastY);
-      else if (ribbon === "silk") drawSilk(y);
-      lastY = y;
-      requestAnimationFrame(ribbonTick);
-    })();
-
-    // dust drifting in lamplight
+    // ---------- dust drifting in lamplight ----------
     if (reduce) return;
     const cv = document.getElementById("dust");
     const ctx = cv.getContext("2d");
