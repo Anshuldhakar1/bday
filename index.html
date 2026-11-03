@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Janamdin Mubarak</title>
+<meta name="theme-color" content="#1b1418">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Kalam:wght@400&display=swap">
+<style>
+  /* Layout: a single quiet column, like pages of an old shayari diary read at night. */
+  :root {
+    --night: #1b1418;
+    --ivory: #efe4d4;
+    --muted: #9c8c90;
+    --candle: #dcae6e;
+    --rule: rgba(239, 228, 212, 0.12);
+    --paper: #f6f1e7;
+    --paper-ink: #2b2326;
+
+    --f-body: "Tiro Devanagari Hindi", Georgia, "Times New Roman", serif;
+    --f-hand: "Kalam", "Segoe Print", "Bradley Hand", cursive;
+
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--night);
+    color: var(--ivory);
+    font-family: var(--f-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  main {
+    max-width: 26rem;
+    margin: 0 auto;
+    padding-left: max(24px, env(safe-area-inset-left, 0px));
+    padding-right: max(24px, env(safe-area-inset-right, 0px));
+    padding-top: calc(5rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    display: flex; flex-direction: column; gap: 4.5rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-weight: 400;
+    font-size: 2.6rem;
+    line-height: 1.2;
+  }
+  .sub { margin: .5rem 0 0; font-style: italic; color: var(--muted); }
+  .sub b { font-weight: 400; font-style: normal; color: var(--candle); }
+
+  .intro { margin: 0; color: var(--muted); font-style: italic; }
+
+  .sher { margin: 0; display: flex; flex-direction: column; gap: .6rem; transition: opacity 1.2s ease; }
+  .js .sher:not(.in) { opacity: .35; }
+  .sher p { margin: 0; font-size: 1.35rem; line-height: 1.65; text-wrap: balance; }
+  .sher cite { font-style: normal; font-size: .85rem; color: var(--candle); opacity: .8; }
+
+  .note { margin: 0; border-top: 1px solid var(--rule); padding-top: 2rem; }
+  .note .sign { display: block; margin-top: .6rem; color: var(--muted); font-style: italic; }
+
+  .polaroid {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 18rem;
+    background: var(--paper);
+    color: var(--paper-ink);
+    padding: .8rem .8rem 1.2rem;
+    transform: rotate(-3deg);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .45);
+  }
+  .polaroid .photo {
+    aspect-ratio: 1;
+    max-width: 100%;
+    background: #e9e2d3;
+    overflow: hidden;
+  }
+  .polaroid img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .polaroid figcaption {
+    font-family: var(--f-hand);
+    font-size: 1.05rem;
+    line-height: 1.45;
+    margin-top: .9rem;
+  }
+
+  .joke { margin: 0; text-align: center; color: var(--muted); font-size: .95rem; }
+
+  .closing {
+    margin: 0;
+    padding-top: 6rem;
+    font-size: 2.3rem;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .closing span { color: var(--candle); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sher { transition: none; }
+    .js .sher:not(.in) { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Janamdin Mubarak</h1>
+    <p class="sub"><b data-name>tum</b></p>
+  </header>
+
+  <p class="intro">I am not a shayar, so I have gathered some of these. Hope you like it.</p>
+
+  <blockquote class="sher">
+    <p>Tumko dekha toh ye khayal aaya,<br>zindagi dhoop, tum ghana saaya</p>
+    <cite>Javed Akhtar · Jagjit Singh</cite>
+  </blockquote>
+
+  <blockquote class="sher">
+    <p>Unke dekhe se jo aa jaati hai munh par raunaq,<br>woh samajhte hain ki beemar ka haal achha hai</p>
+    <cite>Ghalib</cite>
+  </blockquote>
+
+  <blockquote class="sher">
+    <p>Baar baar din ye aaye,<br>tum jiyo hazaaron saal</p>
+    <cite>Hasrat Jaipuri · 1967</cite>
+  </blockquote>
+
+  <p class="note">
+    Bas itna hi. Ye saal tumhe utna hi khush rakhe jitna tum sabko rakhti ho.
+    <span class="sign" data-from></span>
+  </p>
+
+  <figure class="polaroid">
+    <div class="photo">
+      <img src="https://upload.wikimedia.org/wikipedia/en/e/e6/Bojack_Horseman_character.png" alt="BoJack Horseman" referrerpolicy="no-referrer" loading="lazy">
+    </div>
+    <figcaption>Can't wait to see this horseman talk about how the universe is a cruel, uncaring void. 😂</figcaption>
+  </figure>
+
+  <p class="joke">&lt; insert 9-11 joke &gt;</p>
+
+  <p class="closing">Happy birthday, <span>I'll try to keep your no-cry streak going.</span></p>
+</main>
+
+<script>
+  // Her name and your sign-off. Her name can also go at the end of the link, e.g. #Riya
+  const CONFIG = { name: "", from: "" };
+
+  (function () {
+    document.documentElement.classList.add("js");
+
+    let name = CONFIG.name;
+    try {
+      const h = decodeURIComponent((location.hash || "").slice(1)).replace(/[_~.-]+/g, " ").trim();
+      if (h) name = h;
+    } catch (e) {}
+    if (name) {
+      name = name.replace(/\b\w/g, c => c.toUpperCase());
+      document.querySelectorAll("[data-name]").forEach(el => { el.textContent = name; });
+    } else {
+      document.querySelectorAll(".sub").forEach(el => el.remove());
+    }
+    document.querySelectorAll("[data-from]").forEach(el => {
+      if (CONFIG.from) el.textContent = "~ " + CONFIG.from; else el.remove();
+    });
+
+    const items = document.querySelectorAll(".sher");
+    if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      }), { threshold: 0.4 });
+      items.forEach(el => io.observe(el));
+    } else {
+      items.forEach(el => el.classList.add("in"));
+    }
+  })();
+</script>
+</body>
+</html>
